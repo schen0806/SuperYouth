@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16662598921",
+    "project_id": "super-youth",
+    "storage_bucket": "super-youth.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16662598921:android:f375afe9b136ff39236fd8",
+        "android_client_info": {
+          "package_name": "com.example.super_youth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgsgsOsZk9P-qqVqOUsny7BVLzL2J5-uI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
