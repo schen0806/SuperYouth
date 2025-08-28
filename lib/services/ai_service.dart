@@ -32,7 +32,7 @@ class AIService {
             "role": "user",
             "content":
                 "Generate a challenging and unique social scenario about $unitTitle in 3-5 sentences asking the user what they would do in that situation without stating $unitTitle."
-                "Create only one paragraph for the social scenario.",
+                "Create only one paragraph for the social scenario. Use a wide variety of male and female names for each scenario. Change up the names for every scenario.",
           }),
         ],
       );
@@ -59,27 +59,44 @@ class AIService {
         maxToken: 1000,
         model: Gpt4OChatModel(),
         messages: [
-          Map.of({
-            "role": "system",
-            "content":
-                "act as an educational content creator for teenagers. "
-                "You make engaging and meaningful educational content "
-                "for a teen learning platform. ",
-          }),
+          // Map.of({
+          //   "role": "user",
+          //   "content":
+          //       "In a second person perspective, analyze the following social scenario and the user's response to what they would do in that scenario."
+          //       "Scenario: $scenario"
+          //       "User response: $userResponse"
+          //       "format the feedback in a JSON format like this, return only the JSON format and nothing else:"
+          //       "{"
+          //       "   \"score\": (1/10 based on appropriateness and effectiveness)"
+          //       "   \"pros\": (pros of the response)"
+          //       "   \"cons\": (cons of the response)"
+          //       "}",
+          // }),
           Map.of({
             "role": "user",
-            "content":
-                "In a second person perspective, analyze the following social scenario and the user's response to what they would do in that scenario."
-                "Scenario: $scenario"
-                "User response: $userResponse"
-                "format the feedback in a JSON format like this, return only the JSON format and nothing else:"
-                "{"
-                "   \"score\": (1/10 based on appropriateness and effectiveness)"
-                "   \"pros\": (pros of the response)"
-                "   \"cons\": (cons of the response)"
-                "}",
+            "content": """
+Grade the teen’s answer to the scenario below.
+
+SCENARIO:
+$scenario
+
+USER_RESPONSE:
+$userResponse
+
+Return ONLY a single compact JSON object with this exact schema:
+{"score": 0/10, "pros": , "cons": }
+
+Rules:
+- score is an integer from 0 to 10
+- pros and cons are an array of short strings (each string 5–20 words)
+- absolutely NO markdown, NO code fences, NO backticks, NO extra text
+- absolutely a MAXIMUM of 5 bullet points for every pro/con
+""",
           }),
         ],
+
+        // If your chat_gpt_sdk version exposes a response-format option, use it:
+        // responseFormat: {"type":"json_object"},
       );
       final feedback = await openAI.onChatCompletion(request: request);
       //if choices is null, don't run it, use the ? after the variable
