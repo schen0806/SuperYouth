@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:super_youth/providers/auth_provider.dart';
+import 'package:super_youth/widgets/nav_drawer.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -15,26 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //onPressed serves as a function that responds to a specific input i.e. press
-            TextButton(
-              onPressed: () {
-                context.go('/home');
-              },
-              child: Text("Home"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/profile');
-              },
-              child: Text("Profile"),
-            ),
-          ],
-        ),
-      ),
+      drawer: NavDrawer(),
       body: Center(
         child: Consumer<AuthenticationProvider>(
           builder: (context, auth, _) {
