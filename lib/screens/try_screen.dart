@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:super_youth/data/unit.dart';
+import 'package:super_youth/widgets/nav_drawer.dart';
 
 import '../services/ai_service.dart';
 
 class TryScreen extends StatefulWidget {
-  final int id;
+  final int unitNumber;
+  final int scenarioNumber;
 
-  TryScreen({super.key, required this.id});
+  TryScreen({
+    super.key,
+    required this.unitNumber,
+    required this.scenarioNumber,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -24,35 +30,10 @@ class _TryScreenState extends State<TryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {
-                context.go('/home');
-              },
-              child: Text("Home"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/profile');
-              },
-              child: Text("Profile"),
-            ),
-            //FEEDBACK SCREEN TEST-REMOVE IT AFTER COMPLETION OF FEEDBACK SCREEN
-            TextButton(
-              onPressed: () {
-                context.go('/unit/${widget.id}/feedback');
-              },
-              child: Text("feedback"),
-            ),
-          ],
-        ),
-      ),
+      drawer: NavDrawer(),
       body: Center(
         child: FutureBuilder(
-          future: ai.generateContent(units[widget.id - 1].name),
+          future: ai.generateContent(units[widget.unitNumber - 1].name),
           builder: (
             BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot,
@@ -73,7 +54,7 @@ class _TryScreenState extends State<TryScreen> {
                             style: TextTheme.of(context).headlineMedium,
                           ),
                           Text(
-                            "Scenario ${widget.id}",
+                            "Scenario ${widget.scenarioNumber}",
                             style: TextTheme.of(context).headlineLarge,
                           ),
                         ],
@@ -103,7 +84,7 @@ class _TryScreenState extends State<TryScreen> {
                             if (_formKey.currentState!.validate()) {
                               //context.push maintains screen history so the user can go back
                               context.push(
-                                '/unit/${widget.id}/feedback',
+                                '/unit/${widget.unitNumber}/feedback/${widget.scenarioNumber}',
                                 extra: Map.of({
                                   'scenario': snapshot.data!['scenario'],
                                   'userResponse': _responseController.text,

@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:super_youth/widgets/nav_drawer.dart';
 
 import '../data/unit.dart';
 
 class UnitScreen extends StatelessWidget {
-  final int id;
+  final int unitNumber;
 
-  const UnitScreen({super.key, required this.id});
+  const UnitScreen({super.key, required this.unitNumber});
 
   @override
   Widget build(BuildContext context) {
-    Unit unit = units[id - 1];
+    Unit unit = units[unitNumber - 1];
     //Scaffolds always have an appBar and a body
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {
-                context.go('/home');
-              },
-              child: Text("Home"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/profile');
-              },
-              child: Text("Profile"),
-            ),
-          ],
-        ),
-      ),
+      drawer: NavDrawer(),
       body: Center(
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 35),
@@ -42,7 +25,7 @@ class UnitScreen extends StatelessWidget {
             children: [
               Text(
                 style: Theme.of(context).textTheme.displayMedium,
-                "Unit $id",
+                "Unit $unitNumber",
               ),
               Text(
                 style: Theme.of(context).textTheme.displaySmall,
@@ -75,11 +58,11 @@ class UnitScreen extends StatelessWidget {
                   for (int i = 1; i <= unit.numScenarios; i++)
                     ElevatedButton(
                       onPressed: () {
-                        context.push('/unit/$id/try');
+                        context.push('/unit/$unitNumber/try/$i');
                       },
                       child: Text(
                         "scenario $i",
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                 ],
