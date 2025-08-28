@@ -16,6 +16,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      drawerTheme: DrawerThemeData(backgroundColor: primaryColor),
       colorScheme: ColorScheme.light(
         primary: primaryColor,
         secondary: secondaryColor,
