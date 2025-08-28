@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:super_youth/providers/auth_provider.dart';
+import 'package:super_youth/widgets/nav_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -9,27 +10,7 @@ class HomeScreen extends StatelessWidget {
     //Scaffolds always have an appBar and a body
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //onPressed serves as a function that responds to a specific input i.e. press
-            TextButton(
-              onPressed: () {
-                context.go('/unit');
-              },
-              child: Text("Units"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/profile');
-              },
-              child: Text("Profile"),
-            ),
-          ],
-        ),
-      ),
-
+      drawer: NavDrawer(),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
