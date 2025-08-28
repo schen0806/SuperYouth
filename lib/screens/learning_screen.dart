@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:super_youth/widgets/nav_drawer.dart';
 
 class LearningScreen extends StatelessWidget {
   @override
@@ -14,31 +14,7 @@ class LearningScreen extends StatelessWidget {
         ),
       ),
       appBar: AppBar(title: Text("Super Youth")),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {
-                context.go('/home');
-              },
-              child: Text("Home"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/profile');
-              },
-              child: Text("Profile"),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/unit/1');
-              },
-              child: Text("Units"),
-            ),
-          ],
-        ),
-      ),
+      drawer: NavDrawer(),
     );
   }
 }
