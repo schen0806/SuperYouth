@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:super_youth/data/unit.dart';
+import 'package:super_youth/providers/ai_provider.dart';
 import 'package:super_youth/widgets/nav_drawer.dart';
-
-import '../services/ai_service.dart';
 
 class TryScreen extends StatefulWidget {
   final int unitNumber;
@@ -24,7 +24,19 @@ class TryScreen extends StatefulWidget {
 class _TryScreenState extends State<TryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _responseController = TextEditingController();
-  final AIService ai = AIService();
+
+  //not initialized at the time of state creation
+  late Future<Map<String, dynamic>> scenarioData;
+
+  @override
+  void initState() {
+    super.initState();
+    _responseController.clear();
+    scenarioData = Provider.of<AIProvider>(
+      context,
+      listen: false,
+    ).generateContent(units[widget.unitNumber - 1].name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +45,13 @@ class _TryScreenState extends State<TryScreen> {
       drawer: NavDrawer(),
       body: Center(
         child: FutureBuilder(
-          future: ai.generateContent(units[widget.unitNumber - 1].name),
+          future: scenarioData,
           builder: (
             BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot,
             //use dynamic to cover multiple data types that AI generator produces
           ) {
-            if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done) {
               return Form(
                 key: _formKey,
                 child: Container(

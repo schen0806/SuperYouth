@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:super_youth/data/unit.dart';
 import 'package:super_youth/widgets/nav_drawer.dart';
 
-import '../services/ai_service.dart';
+import '../providers/ai_provider.dart';
 
-class FeedbackScreen extends StatelessWidget {
-  final AIService ai = AIService();
+class FeedbackScreen extends StatefulWidget {
   final String userResponse;
   final String scenario;
   final int unitNumber;
@@ -20,6 +20,11 @@ class FeedbackScreen extends StatelessWidget {
     required this.scenarioNumber,
   });
 
+  @override
+  State<StatefulWidget> createState() => _FeedbackScreenState();
+}
+
+class _FeedbackScreenState extends State<FeedbackScreen> {
   String _buildScoreMessage(int score) {
     if (score >= 9)
       return "Amazing";
@@ -52,7 +57,11 @@ class FeedbackScreen extends StatelessWidget {
         //send userresponse from the try screen to the feedback screen
         //futurebuilder builds the UI from the future
         FutureBuilder(
-          future: ai.generateFeedback(scenario, userResponse),
+          //get a provider form a widget class
+          future: Provider.of<AIProvider>(
+            context,
+            listen: false,
+          ).generateFeedback(widget.scenario, widget.userResponse),
           builder: (
             BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot,
@@ -81,24 +90,25 @@ class FeedbackScreen extends StatelessWidget {
                     ),
                     Text(
                       _buildBulletPoints("Pros", feedback["pros"]),
-                      style: TextTheme.of(context).headlineSmall,
+                      style: TextTheme.of(context).bodyLarge,
                     ),
                     Text(
                       _buildBulletPoints("Cons", feedback["cons"]),
-                      style: TextTheme.of(context).headlineSmall,
+                      style: TextTheme.of(context).bodyLarge,
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        context.go("/unit/$unitNumber");
+                        context.go("/unit/${widget.unitNumber}");
                       },
                       icon: Icon(Icons.arrow_back),
-                      label: Text("Back to unit $unitNumber"),
+                      label: Text("Back to unit ${widget.unitNumber}"),
                     ),
-                    if (scenarioNumber < units[unitNumber - 1].numScenarios)
+                    if (widget.scenarioNumber <
+                        units[widget.unitNumber - 1].numScenarios)
                       ElevatedButton.icon(
                         onPressed: () {
                           context.go(
-                            "/unit/$unitNumber/try/${scenarioNumber + 1}",
+                            "/unit/${widget.unitNumber}/try/${widget.scenarioNumber + 1}",
                           );
                         },
                         icon: Icon(Icons.arrow_forward),

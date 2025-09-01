@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:super_youth/config/router.dart';
 import 'package:super_youth/config/theme.dart';
+import 'package:super_youth/providers/ai_provider.dart';
 import 'package:super_youth/providers/auth_provider.dart';
 
 import 'firebase_options.dart';
@@ -13,9 +14,12 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthenticationProvider(),
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AIProvider()),
+        ChangeNotifierProvider(create: (context) => AuthenticationProvider()),
+      ],
+      child: MyApp(),
     ),
   );
 }
