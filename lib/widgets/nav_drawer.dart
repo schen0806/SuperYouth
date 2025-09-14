@@ -7,6 +7,7 @@ class NavDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 20,
         children: [
           //onPressed serves as a function that responds to a specific input i.e. press
           TextButton(
@@ -22,8 +23,16 @@ class NavDrawer extends StatelessWidget {
             },
             child: Text("Profile", style: TextTheme.of(context).headlineMedium),
           ),
+          TextButton(
+            onPressed: () {
+              context.go('/progress');
+            },
+            child: Text(
+              "Progress",
+              style: TextTheme.of(context).headlineMedium,
+            ),
+          ),
         ],
-        spacing: 20,
       ),
     );
   }

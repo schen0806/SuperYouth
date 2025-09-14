@@ -7,9 +7,13 @@ class LearningScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text("Maslow's Hierarchy of Needs", textAlign: TextAlign.center),
+            Text(
+              "Love it or hate it, learn it",
+              textAlign: TextAlign.start,
+              style: TextTheme.of(context).headlineMedium,
+            ),
           ],
         ),
       ),

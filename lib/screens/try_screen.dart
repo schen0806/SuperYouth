@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:super_youth/data/unit.dart';
-import 'package:super_youth/providers/ai_provider.dart';
-import 'package:super_youth/widgets/nav_drawer.dart';
+
+import '../data/unit.dart';
+import '../providers/ai_provider.dart';
+import '../widgets/nav_drawer.dart';
 
 class TryScreen extends StatefulWidget {
   final int unitNumber;
   final int scenarioNumber;
 
-  TryScreen({
+  const TryScreen({
     super.key,
     required this.unitNumber,
     required this.scenarioNumber,
   });
 
   @override
-  State<StatefulWidget> createState() {
-    return _TryScreenState();
-  }
+  State<StatefulWidget> createState() => _TryScreenState();
 }
 
 class _TryScreenState extends State<TryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _responseController = TextEditingController();
-
-  //not initialized at the time of state creation
   late Future<Map<String, dynamic>> scenarioData;
 
   @override
   void initState() {
     super.initState();
-    _responseController.clear();
     scenarioData = Provider.of<AIProvider>(
       context,
       listen: false,
@@ -41,83 +37,95 @@ class _TryScreenState extends State<TryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Super Youth")),
       drawer: NavDrawer(),
+      appBar: AppBar(title: const Text('Super Youth')),
       body: Center(
         child: FutureBuilder(
           future: scenarioData,
           builder: (
             BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot,
-            //use dynamic to cover multiple data types that AI generator produces
           ) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return Form(
-                key: _formKey,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 17),
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Form(
+                  key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          Text(
-                            "Your turn!",
-                            style: TextTheme.of(context).headlineMedium,
-                          ),
-                          Text(
-                            "Scenario ${widget.scenarioNumber}",
-                            style: TextTheme.of(context).headlineLarge,
-                          ),
-                        ],
+                      Text(
+                        "Scenario ${widget.scenarioNumber}",
+                        style: TextTheme.of(context).displaySmall,
                       ),
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
+                      SingleChildScrollView(
                         child: Text(
                           snapshot.data!['scenario'],
                           style: TextTheme.of(context).bodyLarge,
                         ),
                       ),
                       TextFormField(
-                        maxLines: 5,
+                        maxLines: 8,
                         controller: _responseController,
+                        decoration: InputDecoration(
+                          labelText: 'Response',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                         validator: (String? response) {
                           if (response == null || response.isEmpty) {
-                            return "Please enter a response.";
+                            return 'Please enter a response.';
                           }
                           return null;
                         },
                       ),
-
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              //context.push maintains screen history so the user can go back
-                              context.push(
-                                '/unit/${widget.unitNumber}/feedback/${widget.scenarioNumber}',
-                                extra: Map.of({
-                                  'scenario': snapshot.data!['scenario'],
-                                  'userResponse': _responseController.text,
-                                }),
-                              );
-                            }
-                          },
-                          child: Text("Submit"),
-                        ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context.go(
+                              '/unit/${widget.unitNumber}/feedback/${widget.scenarioNumber}',
+                              extra: Map.of({
+                                'scenario': snapshot.data!['scenario'],
+                                'userResponse': _responseController.text,
+                              }),
+                            );
+                          }
+                        },
+                        child: Text("Submit"),
                       ),
                     ],
                   ),
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text(
-                "No scenarios at this moment. Come back soon!",
-                style: TextTheme.of(context).headlineLarge,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Could not generate scenario. Try again.",
+                    style: TextTheme.of(context).bodyLarge?.apply(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ],
               );
             } else {
-              return CircularProgressIndicator();
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 20,
+                children: [
+                  Text(
+                    "Generating scenario",
+                    style: TextTheme.of(context).displaySmall,
+                  ),
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              );
             }
           },
         ),

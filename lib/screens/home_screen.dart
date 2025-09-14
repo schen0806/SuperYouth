@@ -25,11 +25,12 @@ class HomeScreen extends StatelessWidget {
             children: [
               Consumer<AuthenticationProvider>(
                 builder: (context, authProvider, _) {
-                  final name = authProvider.userData?['firstname'] ?? 'there';
+                  final name = authProvider.userData?['firstName'] ?? 'there';
 
                   return Text(
                     "Hello $name!",
-                    style: Theme.of(context).textTheme.displayLarge,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.displayMedium,
                   );
                 },
               ),
