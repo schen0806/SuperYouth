@@ -40,6 +40,7 @@ class AppTheme {
         ),
       ),
       cardTheme: CardTheme(
+        color: secondaryColor,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -63,11 +64,11 @@ class AppTheme {
         fillColor: surfaceColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: Colors.black),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+          borderSide: BorderSide(color: Colors.black),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

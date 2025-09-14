@@ -31,8 +31,8 @@ class AIService {
           Map.of({
             "role": "user",
             "content":
-                "Generate a challenging and unique social scenario about $unitTitle in 3-5 sentences asking the user what they would do in that situation without stating $unitTitle."
-                "Create only one paragraph for the social scenario. Use a wide variety of male and female names for each scenario. Change up the names for every scenario.",
+                "Generate an unique social scenario about $unitTitle in 3-5 sentences asking the user what they would do in that situation without stating $unitTitle."
+                "Create only one paragraph for the social scenario. Set the difficulty of the scenario by using unusual situations e.g. not just group projects, but scenarios with multiple conflicts. Use a wide variety of male and female names for each scenario. Change up the names for every scenario.",
           }),
         ],
       );
@@ -43,10 +43,10 @@ class AIService {
       if (message != null) {
         return Map.of({"scenario": message.content});
       } else {
-        throw Exception('Error generating content. No response.');
+        return Future.error('Error generating content. No response.');
       }
     } on Exception catch (e) {
-      throw Exception('Error generating content: $e');
+      return Future.error('Error generating content: $e');
     }
   }
 
@@ -59,19 +59,6 @@ class AIService {
         maxToken: 1000,
         model: Gpt4OChatModel(),
         messages: [
-          // Map.of({
-          //   "role": "user",
-          //   "content":
-          //       "In a second person perspective, analyze the following social scenario and the user's response to what they would do in that scenario."
-          //       "Scenario: $scenario"
-          //       "User response: $userResponse"
-          //       "format the feedback in a JSON format like this, return only the JSON format and nothing else:"
-          //       "{"
-          //       "   \"score\": (1/10 based on appropriateness and effectiveness)"
-          //       "   \"pros\": (pros of the response)"
-          //       "   \"cons\": (cons of the response)"
-          //       "}",
-          // }),
           Map.of({
             "role": "user",
             "content": """
@@ -84,11 +71,13 @@ USER_RESPONSE:
 $userResponse
 
 Return ONLY a single compact JSON object with this exact schema:
-{"score": 0/10, "pros": , "cons": }
+{"score": 0/10, "pros": , "cons": , "Model Response": }
 
 Rules:
 - score is an integer from 0 to 10
-- pros and cons are an array of short strings (each string 5–20 words)
+- pros and cons are an array of short strings (each string 5–20 words). 
+e.g. Show how the user response is too broad, straightforward, or off topic
+-provide a model response as to how the user should've answered the prompt to earn full credit
 - absolutely NO markdown, NO code fences, NO backticks, NO extra text
 - absolutely a MAXIMUM of 5 bullet points for every pro/con
 """,

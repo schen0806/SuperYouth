@@ -3,6 +3,7 @@ import 'package:super_youth/screens/home_screen.dart';
 import 'package:super_youth/screens/learning_screen.dart';
 import 'package:super_youth/screens/login_screen.dart';
 import 'package:super_youth/screens/profile_screen.dart';
+import 'package:super_youth/screens/progress_screen.dart';
 import 'package:super_youth/screens/sign_up_screen.dart';
 import 'package:super_youth/screens/splash_screen.dart';
 import 'package:super_youth/screens/unit_screen.dart';
@@ -59,5 +60,6 @@ final appRouter = GoRouter(
       ],
     ),
     GoRoute(path: '/profile', builder: (context, state) => ProfileScreen()),
+    GoRoute(path: '/progress', builder: (context, state) => ProgressScreen()),
   ],
 );

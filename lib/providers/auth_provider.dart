@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:super_youth/data/unit.dart';
 
 //AuthProvider holds all the code for authentication state-encapsulation of all relevant code that are important to it
 class AuthenticationProvider extends ChangeNotifier {
@@ -116,6 +117,62 @@ class AuthenticationProvider extends ChangeNotifier {
       await loadUserData();
     } finally {
       notifyListeners();
+    }
+  }
+
+  Future<void> updateProgress(
+    int unitNum,
+    Map<String, dynamic> feedback,
+    String scenario,
+    String userResponse,
+  ) async {
+    if (_user == null) return;
+    try {
+      await _db.collection('users').doc(_user!.uid).collection('progress').add({
+        'unitNumber': unitNum,
+        'scenario': scenario,
+        'response': userResponse,
+        'feedback': feedback,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } on Exception catch (e) {
+      print("Error updating the user progress");
+    }
+  }
+
+  Future<List<double>> getAvgScore() async {
+    try {
+      final snapshot =
+          await _db
+              .collection('users')
+              .doc(_user!.uid)
+              .collection('progress')
+              .get();
+      double totalscore = 0;
+      int completedScenarios = snapshot.docs.length;
+
+      List<double> getAvgScorePerUnit = List.generate(
+        units.length,
+        (index) => 0.0,
+      );
+      List<int> completedScenariosPerUnit = List.generate(
+        units.length,
+        (index) => 0,
+      );
+      for (final doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        int unitNumber = data['unitNumber'];
+        int docScore = data['feedback']['score'];
+        getAvgScorePerUnit[unitNumber - 1] += docScore;
+        completedScenariosPerUnit[unitNumber - 1]++;
+      }
+
+      for (int i = 0; i < getAvgScorePerUnit.length; i++) {
+        getAvgScorePerUnit[i] /= completedScenariosPerUnit[i];
+      }
+      return getAvgScorePerUnit;
+    } on Exception catch (e) {
+      rethrow;
     }
   }
 }
