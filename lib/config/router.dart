@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:super_youth/screens/home_screen.dart';
-import 'package:super_youth/screens/learning_screen.dart';
 import 'package:super_youth/screens/login_screen.dart';
 import 'package:super_youth/screens/profile_screen.dart';
 import 'package:super_youth/screens/progress_screen.dart';
@@ -18,7 +17,6 @@ final appRouter = GoRouter(
     GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
     GoRoute(path: '/signup', builder: (context, state) => SignUpScreen()),
     GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
-    GoRoute(path: '/learn', builder: (context, state) => LearningScreen()),
 
     GoRoute(
       path: '/unit/:unitNumber',

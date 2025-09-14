@@ -48,11 +48,12 @@ class _TryScreenState extends State<TryScreen> {
           ) {
             if (snapshot.connectionState == ConnectionState.done) {
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    spacing: 25,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         "Scenario ${widget.scenarioNumber}",
@@ -111,21 +112,7 @@ class _TryScreenState extends State<TryScreen> {
                 ],
               );
             } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 20,
-                children: [
-                  Text(
-                    "Generating scenario",
-                    style: TextTheme.of(context).displaySmall,
-                  ),
-                  SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(),
-                  ),
-                ],
-              );
+              return CircularProgressIndicator();
             }
           },
         ),

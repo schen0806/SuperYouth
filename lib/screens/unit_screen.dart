@@ -40,18 +40,6 @@ class UnitScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.go('/learn');
-                  },
-                  child: Text(
-                    "Learn",
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-              ),
               Column(
                 spacing: 10,
                 children: [
