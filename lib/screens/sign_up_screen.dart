@@ -58,107 +58,131 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Center(
         child: Form(
           key: _formKey,
-          child: Column(
-            //use the TextField class
-            children: [
-              //organize array by having one item per line
-              Text(
-                "Sign up",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(hintText: "Email"),
-                validator: (String? email) {
-                  if (email == null ||
-                      !RegExp(
-                        r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
-                      ).hasMatch(email)) {
-                    return 'Invalid email entered.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(hintText: "Username"),
-                validator: (String? username) {
-                  if (username == null ||
-                      username.length < 3 ||
-                      username.length > 20) {
-                    return 'Username must be between 3 and 20 characters long.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _firstnameController,
-                decoration: const InputDecoration(hintText: "First Name"),
-                validator: (String? fname) {
-                  if (fname == null || fname.length < 3 || fname.length > 10) {
-                    return 'Name must be between 3 and 10 characters long.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _lastnameController,
-                decoration: const InputDecoration(hintText: "Last name"),
-                validator: (String? lname) {
-                  if (lname == null || lname.length < 3 || lname.length > 10) {
-                    return 'Username must be between 3 and 10 characters long.';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(hintText: 'Password'),
-                obscureText: true,
-                validator: (String? password) {
-                  if (password == null ||
-                      !RegExp(
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$',
-                      ).hasMatch(password)) {
-                    return 'Password must have the following:\n'
-                        '- Minimum 8 characters long\n'
-                        '- 1 uppercase letter\n'
-                        '- 1 lowercase letter\n'
-                        '- 1 number\n'
-                        '- 1 special character';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _confirmPasswordController,
-                decoration: const InputDecoration(hintText: 'Confirm password'),
-                obscureText: true,
-                validator: (String? password) {
-                  if (password != _passwordController.text) {
-                    return 'Passwords do not match.';
-                  }
-                  return null;
-                },
-              ),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+            child: Column(
+              spacing: 10,
+              //use the TextField class
+              children: [
+                //organize array by having one item per line
+                Text(
+                  "Sign up",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    hintText: "Email",
+                    prefixIcon: Icon(Icons.email),
+                    label: Text("Email"),
+                  ),
+                  validator: (String? email) {
+                    if (email == null ||
+                        !RegExp(
+                          r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
+                        ).hasMatch(email)) {
+                      return 'Invalid email entered.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    hintText: "Username",
+                    prefixIcon: Icon(Icons.person),
+                    label: Text("Username"),
+                  ),
+                  validator: (String? username) {
+                    if (username == null ||
+                        username.length < 3 ||
+                        username.length > 20) {
+                      return 'Username must be between 3 and 20 characters long.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _firstnameController,
+                  decoration: const InputDecoration(hintText: "First Name"),
+                  validator: (String? fname) {
+                    if (fname == null ||
+                        fname.length < 3 ||
+                        fname.length > 10) {
+                      return 'Name must be between 3 and 10 characters long.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _lastnameController,
+                  decoration: const InputDecoration(hintText: "Last name"),
+                  validator: (String? lname) {
+                    if (lname == null ||
+                        lname.length < 3 ||
+                        lname.length > 10) {
+                      return 'Username must be between 3 and 10 characters long.';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                    label: Text("Password"),
+                  ),
+                  obscureText: true,
+                  validator: (String? password) {
+                    if (password == null ||
+                        !RegExp(
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$',
+                        ).hasMatch(password)) {
+                      return 'Password must have the following:\n'
+                          '- Minimum 8 characters long\n'
+                          '- 1 uppercase letter\n'
+                          '- 1 lowercase letter\n'
+                          '- 1 number\n'
+                          '- 1 special character';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  decoration: const InputDecoration(
+                    hintText: 'Confirm password',
+                    prefixIcon: Icon(Icons.lock),
+                    label: Text("Confirm password"),
+                  ),
+                  obscureText: true,
+                  validator: (String? password) {
+                    if (password != _passwordController.text) {
+                      return 'Passwords do not match.';
+                    }
+                    return null;
+                  },
+                ),
 
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    //in flutter, values can be null.
-                    //using the exclamation point forces Flutter to treat the value that can't be null.'
-                    await _signUp();
-                  }
-                },
-                child: Text("Sign up"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  context.go('/login');
-                },
-                child: Text("Back to login"),
-              ),
-            ],
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      //in flutter, values can be null.
+                      //using the exclamation point forces Flutter to treat the value that can't be null.'
+                      await _signUp();
+                    }
+                  },
+                  child: Text("Sign up"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    context.go('/login');
+                  },
+                  child: Text("Back to login"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

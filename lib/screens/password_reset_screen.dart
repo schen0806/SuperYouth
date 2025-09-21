@@ -1,55 +1,45 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:super_youth/providers/auth_provider.dart';
 
 //import the StatelessWidget material version
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class PasswordResetScreen extends StatefulWidget {
+  const PasswordResetScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
-    return _LoginScreenState();
+    return _PasswordResetScreenState();
   }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _PasswordResetScreenState extends State<PasswordResetScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController =
       TextEditingController(); //control how we submit the values in the form, how we validate the data
   //e.g. password rules, check if the email is valid
-  final _passwordController = TextEditingController();
+  final _confirmEmailController = TextEditingController();
 
-  Future<void> _login() async {
-    //try blocks are used to run codes that could cause an error
-    //try blocks are always paired with the catch blocks(blocks that catch the errors in the try blocks)
+  Future<void> _sendPasswordResetEmail() async {
     try {
       AuthenticationProvider authProvider = Provider.of<AuthenticationProvider>(
         context,
         listen: false,
       );
-      await authProvider.login(_emailController.text, _passwordController.text);
-      //if login finishes without errors, go to the home screen
-
-      //in async functions, make sure that the screen is working/in use properly
-      //If screen in use, go to the home screen
-      if (mounted) {
-        context.go('/home');
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == ("user-not-found")) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("No user found for that email.")),
-        );
-      } else if (e.code == 'invalid-credential' && mounted) {
-        //the ScaffoldMessenger is the class responsible for showing the SnackBar at
-        //the bottom of the screen
-        //ScaffoldMessenger.of(context) gets me the scaffold of the current context
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text("Invalid Credentials")));
-      }
+      await authProvider.sendPasswordResetEmail(_emailController.text);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Password reset email successfully sent")),
+      );
+      context.go('/login');
+    } catch (e) {
+      //if the app is still active, then stop running the function
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Could not send password reset email. Try again."),
+        ),
+      );
     }
   }
 
@@ -73,15 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Image.asset("assets/SY_Logo.png", width: 100),
                 //organize array by having one item per line
                 Text(
-                  "Login",
+                  "Reset Password",
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                 ),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
-                    label: Text("Username"),
+                    label: Text("Email"),
                     prefixIcon: Icon(Icons.email),
-                    hintText: "Enter username",
+                    hintText: "Enter Email",
                   ),
                   style: const TextStyle(
                     color: Colors.black,
@@ -98,54 +88,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
+                  controller: _confirmEmailController,
                   decoration: InputDecoration(
-                    hintText: "Enter password",
+                    hintText: "Confirm email",
                     prefixIcon: Icon(Icons.lock),
                   ),
                   style: const TextStyle(
                     color: Colors.black,
                     fontFamily: "Georgia",
                   ),
-                  validator: (String? password) {
-                    if (password == null ||
-                        !RegExp(
-                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$',
-                        ).hasMatch(password)) {
-                      return 'Password must have the following:\n'
-                          '- Minimum 8 characters long\n'
-                          '- 1 uppercase letter\n'
-                          '- 1 lowercase letter\n'
-                          '- 1 number\n'
-                          '- 1 special character';
+                  validator: (String? email) {
+                    if (email != _emailController.text) {
+                      return 'Emails do not match';
                     }
                     return null;
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () {
                     //the exclamation point is Dart's syntax to only run the function if currentState is not null
                     if (_formKey.currentState!.validate()) {
-                      //call _login();
-                      //await can only be used in async functions-wait until the function is done and keep going
-                      await _login();
+                      _sendPasswordResetEmail();
                     }
                   },
-                  child: Text("Login"),
+                  child: Text("Reset password"),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    //the exclamation point is Dart's syntax to only run the function if currentState is not null
-                    context.go("/signup");
+                    context.go('/login');
                   },
-                  child: Text("Sign Up"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.go('/reset-password');
-                  },
-                  child: Text("Forgot Password"),
+                  child: Text("Back to login"),
                 ),
               ],
             ),

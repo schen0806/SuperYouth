@@ -91,6 +91,10 @@ class AuthenticationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> sendPasswordResetEmail(String email) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
   Future<void> updateProfile({
     String? firstName,
     String? lastName,
@@ -172,6 +176,25 @@ class AuthenticationProvider extends ChangeNotifier {
       }
       return getAvgScorePerUnit;
     } on Exception catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> sendPasswordEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      print("Error resetting password!");
+      //when we catch an error, print it out and throw the same error to this method
+      rethrow;
+    }
+  }
+
+  Future<void> confirmPasswordReset(String code, String newPassword) async {
+    try {
+      await _auth.confirmPasswordReset(code: code, newPassword: newPassword);
+    } catch (e) {
+      print("Password is already in use");
       rethrow;
     }
   }
