@@ -9,7 +9,8 @@ class AIProvider extends ChangeNotifier {
     _ai = AIService();
   }
 
-  //provider creates a middle ground for relaying information between UI code and the AI Service
+  //provider creates a middle ground for relaying information between UI code
+  // and the AI Service
   Future<Map<String, dynamic>> generateContent(String unitTitle) async {
     return _ai.generateContent(unitTitle);
   }

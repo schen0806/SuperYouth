@@ -61,93 +61,95 @@ class _LoginScreenState extends State<LoginScreen> {
         title: Text("Super Youth"),
       ),
       //body holds the actual content
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Column(
-              spacing: 10,
-              //use the TextField class
-              children: [
-                Image.asset("assets/SY_Logo.png", width: 100),
-                //organize array by having one item per line
-                Text(
-                  "Login",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    label: Text("Username"),
-                    prefixIcon: Icon(Icons.email),
-                    hintText: "Enter username",
+      body: SafeArea(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: Column(
+                spacing: 10,
+                //use the TextField class
+                children: [
+                  Image.asset("assets/SY_Logo.png", width: 100),
+                  //organize array by having one item per line
+                  Text(
+                    "Login",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                   ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Georgia",
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      label: Text("Username"),
+                      prefixIcon: Icon(Icons.email),
+                      hintText: "Enter username",
+                    ),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Georgia",
+                    ),
+                    validator: (String? email) {
+                      if (email == null ||
+                          !RegExp(
+                            r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
+                          ).hasMatch(email)) {
+                        return 'Invalid email entered.';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (String? email) {
-                    if (email == null ||
-                        !RegExp(
-                          r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
-                        ).hasMatch(email)) {
-                      return 'Invalid email entered.';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: "Enter password",
-                    prefixIcon: Icon(Icons.lock),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter password",
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Georgia",
+                    ),
+                    validator: (String? password) {
+                      if (password == null ||
+                          !RegExp(
+                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$',
+                          ).hasMatch(password)) {
+                        return 'Password must have the following:\n'
+                            '- Minimum 8 characters long\n'
+                            '- 1 uppercase letter\n'
+                            '- 1 lowercase letter\n'
+                            '- 1 number\n'
+                            '- 1 special character';
+                      }
+                      return null;
+                    },
                   ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Georgia",
+                  ElevatedButton(
+                    onPressed: () async {
+                      //the exclamation point is Dart's syntax to only run the function if currentState is not null
+                      if (_formKey.currentState!.validate()) {
+                        //call _login();
+                        //await can only be used in async functions-wait until the function is done and keep going
+                        await _login();
+                      }
+                    },
+                    child: Text("Login"),
                   ),
-                  validator: (String? password) {
-                    if (password == null ||
-                        !RegExp(
-                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$',
-                        ).hasMatch(password)) {
-                      return 'Password must have the following:\n'
-                          '- Minimum 8 characters long\n'
-                          '- 1 uppercase letter\n'
-                          '- 1 lowercase letter\n'
-                          '- 1 number\n'
-                          '- 1 special character';
-                    }
-                    return null;
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    //the exclamation point is Dart's syntax to only run the function if currentState is not null
-                    if (_formKey.currentState!.validate()) {
-                      //call _login();
-                      //await can only be used in async functions-wait until the function is done and keep going
-                      await _login();
-                    }
-                  },
-                  child: Text("Login"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    //the exclamation point is Dart's syntax to only run the function if currentState is not null
-                    context.go("/signup");
-                  },
-                  child: Text("Sign Up"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.go('/reset-password');
-                  },
-                  child: Text("Forgot Password"),
-                ),
-              ],
+                  ElevatedButton(
+                    onPressed: () {
+                      //the exclamation point is Dart's syntax to only run the function if currentState is not null
+                      context.go("/signup");
+                    },
+                    child: Text("Sign Up"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/reset-password');
+                    },
+                    child: Text("Forgot Password"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

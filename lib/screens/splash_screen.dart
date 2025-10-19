@@ -48,23 +48,25 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       //create an AppBar with a title
       //center the widget by creating a body
-      body: Center(
-        //the column is the parent widget where children widgets
-        // are inherited from it
-        child: Container(
-          margin: EdgeInsets.only(top: 250),
-          child: Column(
-            spacing: 10,
-            mainAxisAlignment: MainAxisAlignment.start,
-            //make a widget array that holds the text and row
-            //rows need to be in arrays of length >= 2
-            children: [
-              Image.asset("assets/SY_Logo.png", width: 300),
-              Text(
-                "Super Youth",
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-            ],
+      body: SafeArea(
+        child: Center(
+          //the column is the parent widget where children widgets
+          // are inherited from it
+          child: Container(
+            margin: EdgeInsets.only(top: 250),
+            child: Column(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.start,
+              //make a widget array that holds the text and row
+              //rows need to be in arrays of length >= 2
+              children: [
+                Image.asset("assets/SY_Logo.png", width: 300),
+                Text(
+                  "Super Youth",
+                  style: Theme.of(context).textTheme.displayLarge,
+                ),
+              ],
+            ),
           ),
         ),
       ),

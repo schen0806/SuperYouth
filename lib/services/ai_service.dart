@@ -31,8 +31,14 @@ class AIService {
           Map.of({
             "role": "user",
             "content":
-                "Generate an unique social scenario about $unitTitle in 3-5 sentences asking the user what they would do in that situation without stating $unitTitle."
-                "Create only one paragraph for the social scenario. Set the difficulty of the scenario by using unusual situations e.g. not just group projects, but scenarios with multiple conflicts. Use a wide variety of male and female names for each scenario. Change up the names for every scenario.",
+                "Generate a unique social scenario about $unitTitle in "
+                "dialogue form between 2 or more characters asking the user "
+                "what they would do in that situation without stating $unitTitle."
+                "Use a wide variety of male and female names. "
+                "Only respond with the dialogue between the characters in each scenario. Omit the background information "
+                "about the scenario and the characters. Only keep the dialogue, remove the word 'scenario'. "
+                "Provide your response with plain text without formatting"
+                "",
           }),
         ],
       );
@@ -71,7 +77,7 @@ USER_RESPONSE:
 $userResponse
 
 Return ONLY a single compact JSON object with this exact schema:
-{"score": 0/10, "pros": , "cons": , "Model Response": }
+{"score": 0/10, "pros": , "cons": }
 
 Rules:
 - score is an integer from 0 to 10

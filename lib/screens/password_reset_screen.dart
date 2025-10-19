@@ -51,75 +51,77 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         title: Text("Super Youth"),
       ),
       //body holds the actual content
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Column(
-              spacing: 10,
-              //use the TextField class
-              children: [
-                Image.asset("assets/SY_Logo.png", width: 100),
-                //organize array by having one item per line
-                Text(
-                  "Reset Password",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-                ),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    label: Text("Email"),
-                    prefixIcon: Icon(Icons.email),
-                    hintText: "Enter Email",
+      body: SafeArea(
+        child: Center(
+          child: Form(
+            key: _formKey,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+              child: Column(
+                spacing: 10,
+                //use the TextField class
+                children: [
+                  Image.asset("assets/SY_Logo.png", width: 100),
+                  //organize array by having one item per line
+                  Text(
+                    "Reset Password",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
                   ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Georgia",
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      label: Text("Email"),
+                      prefixIcon: Icon(Icons.email),
+                      hintText: "Enter Email",
+                    ),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Georgia",
+                    ),
+                    validator: (String? email) {
+                      if (email == null ||
+                          !RegExp(
+                            r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
+                          ).hasMatch(email)) {
+                        return 'Invalid email entered.';
+                      }
+                      return null;
+                    },
                   ),
-                  validator: (String? email) {
-                    if (email == null ||
-                        !RegExp(
-                          r'^[\w\-.]+@([\w-]+\.)+[\w-]{2,}$',
-                        ).hasMatch(email)) {
-                      return 'Invalid email entered.';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _confirmEmailController,
-                  decoration: InputDecoration(
-                    hintText: "Confirm email",
-                    prefixIcon: Icon(Icons.lock),
+                  TextFormField(
+                    controller: _confirmEmailController,
+                    decoration: InputDecoration(
+                      hintText: "Confirm email",
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Georgia",
+                    ),
+                    validator: (String? email) {
+                      if (email != _emailController.text) {
+                        return 'Emails do not match';
+                      }
+                      return null;
+                    },
                   ),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Georgia",
+                  ElevatedButton(
+                    onPressed: () {
+                      //the exclamation point is Dart's syntax to only run the function if currentState is not null
+                      if (_formKey.currentState!.validate()) {
+                        _sendPasswordResetEmail();
+                      }
+                    },
+                    child: Text("Reset password"),
                   ),
-                  validator: (String? email) {
-                    if (email != _emailController.text) {
-                      return 'Emails do not match';
-                    }
-                    return null;
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    //the exclamation point is Dart's syntax to only run the function if currentState is not null
-                    if (_formKey.currentState!.validate()) {
-                      _sendPasswordResetEmail();
-                    }
-                  },
-                  child: Text("Reset password"),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    context.go('/login');
-                  },
-                  child: Text("Back to login"),
-                ),
-              ],
+                  ElevatedButton(
+                    onPressed: () {
+                      context.go('/login');
+                    },
+                    child: Text("Back to login"),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

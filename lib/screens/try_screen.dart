@@ -39,82 +39,89 @@ class _TryScreenState extends State<TryScreen> {
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(title: const Text('Super Youth')),
-      body: Center(
-        child: FutureBuilder(
-          future: scenarioData,
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<Map<String, dynamic>> snapshot,
-          ) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    spacing: 25,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Scenario ${widget.scenarioNumber}",
-                        style: TextTheme.of(context).displaySmall,
-                      ),
-                      SingleChildScrollView(
-                        child: Text(
-                          snapshot.data!['scenario'],
-                          style: TextTheme.of(context).bodyLarge,
+      body: SafeArea(
+        child: Center(
+          child: FutureBuilder(
+            future: scenarioData,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<Map<String, dynamic>> snapshot,
+            ) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      spacing: 25,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Scenario ${widget.scenarioNumber}",
+                          style: TextTheme.of(context).displaySmall,
                         ),
-                      ),
-                      TextFormField(
-                        maxLines: 8,
-                        controller: _responseController,
-                        decoration: InputDecoration(
-                          labelText: 'Response',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        //Expanded fills in the remaining space of the column
+                        Expanded(
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              child: Text(
+                                snapshot.data!['scenario'],
+                                style: TextTheme.of(context).bodyLarge,
+                              ),
+                            ),
                           ),
                         ),
-                        validator: (String? response) {
-                          if (response == null || response.isEmpty) {
-                            return 'Please enter a response.';
-                          }
-                          return null;
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.go(
-                              '/unit/${widget.unitNumber}/feedback/${widget.scenarioNumber}',
-                              extra: Map.of({
-                                'scenario': snapshot.data!['scenario'],
-                                'userResponse': _responseController.text,
-                              }),
-                            );
-                          }
-                        },
-                        child: Text("Submit"),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Could not generate scenario. Try again.",
-                    style: TextTheme.of(context).bodyLarge?.apply(
-                      color: Theme.of(context).colorScheme.error,
+                        TextFormField(
+                          maxLines: 8,
+                          controller: _responseController,
+                          decoration: InputDecoration(
+                            labelText: 'Response',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (String? response) {
+                            if (response == null || response.isEmpty) {
+                              return 'Please enter a response.';
+                            }
+                            return null;
+                          },
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.go(
+                                '/unit/${widget.unitNumber}/feedback/${widget.scenarioNumber}',
+                                extra: Map.of({
+                                  'scenario': snapshot.data!['scenario'],
+                                  'userResponse': _responseController.text,
+                                }),
+                              );
+                            }
+                          },
+                          child: Text("Submit"),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              );
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
+                );
+              } else if (snapshot.hasError) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Could not generate scenario. Try again.",
+                      style: TextTheme.of(context).bodyLarge?.apply(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          ),
         ),
       ),
     );

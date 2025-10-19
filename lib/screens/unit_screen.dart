@@ -16,46 +16,48 @@ class UnitScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
       drawer: NavDrawer(),
-      body: Center(
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 35),
+      body: SafeArea(
+        child: Center(
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 35),
 
-          child: Column(
-            //actual content/text
-            children: [
-              Text(
-                style: Theme.of(context).textTheme.displayMedium,
-                "Unit $unitNumber",
-              ),
-              Text(
-                style: Theme.of(context).textTheme.displaySmall,
-                unit.name,
-                textAlign: TextAlign.center,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 30),
-                child: Text(
-                  unit.description,
-                  style: Theme.of(context).textTheme.headlineMedium,
+            child: Column(
+              //actual content/text
+              children: [
+                Text(
+                  style: Theme.of(context).textTheme.displayMedium,
+                  "Unit $unitNumber",
+                ),
+                Text(
+                  style: Theme.of(context).textTheme.displaySmall,
+                  unit.name,
                   textAlign: TextAlign.center,
                 ),
-              ),
-              Column(
-                spacing: 10,
-                children: [
-                  for (int i = 1; i <= unit.numScenarios; i++)
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push('/unit/$unitNumber/try/$i');
-                      },
-                      child: Text(
-                        "scenario $i",
-                        style: Theme.of(context).textTheme.headlineSmall,
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 30),
+                  child: Text(
+                    unit.description,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Column(
+                  spacing: 10,
+                  children: [
+                    for (int i = 1; i <= unit.numScenarios; i++)
+                      ElevatedButton(
+                        onPressed: () {
+                          context.push('/unit/$unitNumber/try/$i');
+                        },
+                        child: Text(
+                          "scenario $i",
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
                       ),
-                    ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

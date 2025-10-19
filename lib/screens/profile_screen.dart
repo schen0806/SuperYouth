@@ -23,76 +23,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Super Youth")),
       drawer: NavDrawer(),
-      body: Center(
-        child: Consumer<AuthenticationProvider>(
-          builder: (context, auth, _) {
-            String firstName = auth.userData?['firstName'];
-            String lastName = auth.userData?['lastName'];
-            String username = auth.userData?['username'];
-            String email = auth.userData?['email'];
+      body: SafeArea(
+        child: Center(
+          child: Consumer<AuthenticationProvider>(
+            builder: (context, auth, _) {
+              String firstName = auth.userData?['firstName'];
+              String lastName = auth.userData?['lastName'];
+              int level = auth.userData?['level'];
+              int xp = auth.userData?['xp'];
 
-            return Container(
-              margin: EdgeInsets.only(top: 35),
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  spacing: 20,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Profile",
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                    if (!_isEditing) ...[
-                      Image.asset("assets/blank_avatar.webp", width: 125),
+              return Container(
+                margin: EdgeInsets.only(top: 35),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    spacing: 20,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
                       Text(
-                        firstName,
-                        style: Theme.of(context).textTheme.headlineLarge,
+                        "Profile",
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
-                      Text(
-                        lastName,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                      Text(
-                        username,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                      Text(
-                        email,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _isEditing = true;
-                          });
-                        },
-                        child: Text("Edit Profile"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Delete Account"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await Provider.of<AuthenticationProvider>(
-                            context,
-                            listen: false,
-                          ).signOut();
-                          if (context.mounted) {
-                            context.go('/login');
-                          }
-                        },
-                        child: Text("Sign Out"),
-                      ),
-                    ] else
-                      _buildEditProfile(),
-                    //on button press, function runs
-                  ],
+                      if (!_isEditing) ...[
+                        Image.asset("assets/blank_avatar.webp", width: 125),
+                        Text(
+                          firstName,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        Text(
+                          lastName,
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        Text(
+                          "Level: $level",
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _isEditing = true;
+                            });
+                          },
+                          child: Text("Edit Profile"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Delete Account"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await Provider.of<AuthenticationProvider>(
+                              context,
+                              listen: false,
+                            ).signOut();
+                            if (context.mounted) {
+                              context.go('/login');
+                            }
+                          },
+                          child: Text("Sign Out"),
+                        ),
+                      ] else
+                        _buildEditProfile(),
+                      //on button press, function runs
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

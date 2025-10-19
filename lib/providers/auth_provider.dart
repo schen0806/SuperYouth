@@ -68,6 +68,8 @@ class AuthenticationProvider extends ChangeNotifier {
         'firstName': firstName,
         'lastName': lastName,
         'username': username,
+        'xp': 0,
+        'level': 1,
         'createdAt': FieldValue.serverTimestamp(),
       });
     } finally {
@@ -132,6 +134,25 @@ class AuthenticationProvider extends ChangeNotifier {
   ) async {
     if (_user == null) return;
     try {
+      //get user data
+      //initial XP Gained value
+      int xpGained = 3;
+      if (feedback['score'] <= 10 && feedback['score'] >= 8) {
+        xpGained = 10;
+      } else if (feedback['score'] <= 7 && feedback['score'] >= 5) {
+        xpGained = 5;
+      }
+      int level = _userData?['level'];
+      int xpCost = 15 + 5 * (level - 1);
+      int currXP = _userData?['xp'] + xpGained;
+      if (currXP >= xpCost) {
+        level++;
+        currXP -= xpCost;
+      }
+      await _db.collection('users').doc(_user!.uid).update({
+        'level': level,
+        'xp': currXP,
+      });
       await _db.collection('users').doc(_user!.uid).collection('progress').add({
         'unitNumber': unitNum,
         'scenario': scenario,
@@ -185,7 +206,8 @@ class AuthenticationProvider extends ChangeNotifier {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       print("Error resetting password!");
-      //when we catch an error, print it out and throw the same error to this method
+      //when we catch an error, print it out and throw the same error to
+      // this method
       rethrow;
     }
   }
