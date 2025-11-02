@@ -21,63 +21,73 @@ class _ProgressScreenState extends State<ProgressScreen> {
         child: Center(
           child: FutureBuilder(
             future:
-            Provider.of<AuthenticationProvider>(
-              context,
-              listen: false,
-            ).getAvgScore(),
+                Provider.of<AuthenticationProvider>(
+                  context,
+                  listen: false,
+                ).getAvgScore(),
             builder: (
-                BuildContext context,
-                AsyncSnapshot<List<double>> snapshot,
-                ) {
+              BuildContext context,
+              AsyncSnapshot<List<double>> snapshot,
+            ) {
               if (snapshot.hasData) {
-                return Column(
-                  spacing: 20,
-                  children: [
-                    Text("Progress", style: TextTheme.of(context).displayMedium),
-                    //loop through each avg score in the snapshot data
-                    for (int i = 0; i < snapshot.data!.length; i++)
-                      if (snapshot.data![i] != 0)
-                        Card(
-                          child: SizedBox(
-                            height: 80,
-                            width: 230,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Average Score for Unit ${i + 1}: ",
-                                  style: TextTheme.of(context).bodyLarge,
-                                ),
-                                Text(
-                                  "${snapshot.data![i].toStringAsFixed(2)}",
-                                  style: TextTheme.of(context).displaySmall,
-                                ),
-                              ],
-                            ),
-                          ),
+                return Scrollbar(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      spacing: 10,
+                      children: [
+                        Text(
+                          "Progress",
+                          style: TextTheme.of(context).displayMedium,
                         ),
-                    Consumer<AuthenticationProvider>(
-                      builder: (
-                          BuildContext context,
-                          AuthenticationProvider auth,
-                          Widget? child,
+                        Consumer<AuthenticationProvider>(
+                          builder: (
+                            BuildContext context,
+                            AuthenticationProvider auth,
+                            Widget? child,
                           ) {
-                        return Container(
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                            spacing: 20,
-                            children: [
-                              Text(
-                                "Level: ${auth.userData?['level']}",
-                                style: TextTheme.of(context).displayMedium,
+                            return Container(
+                              padding: EdgeInsets.symmetric(horizontal: 70),
+                              child: Column(
+                                spacing: 20,
+                                children: [
+                                  Text(
+                                    "Level: ${auth.userData?['level']}",
+                                    style: TextTheme.of(context).displayMedium,
+                                  ),
+                                  _buildXPBar(
+                                    auth.userData?['level'],
+                                    auth.userData?['xp'],
+                                  ),
+                                ],
                               ),
-                              _buildXPBar(auth.userData?['level'], auth.userData?['xp']),
-                            ],
-                          ),
-                        );
-                      },
-                    )
-                  ],
+                            );
+                          },
+                        ),
+                        //loop through each avg score in the snapshot data
+                        for (int i = 0; i < snapshot.data!.length; i++)
+                          if (snapshot.data![i] != 0)
+                            Card(
+                              child: SizedBox(
+                                height: 80,
+                                width: 230,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Average Score for Unit ${i + 1}: ",
+                                      style: TextTheme.of(context).bodyLarge,
+                                    ),
+                                    Text(
+                                      "${snapshot.data![i].toStringAsFixed(2)}",
+                                      style: TextTheme.of(context).displaySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                      ],
+                    ),
+                  ),
                 );
               } else {
                 return CircularProgressIndicator();
