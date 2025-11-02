@@ -58,17 +58,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       return "Nice try";
   }
 
-  String _buildBulletPoints(String title, List<dynamic> bulletPoints) {
-    if (bulletPoints.isEmpty) {
-      return "";
-    }
+  Widget _buildBulletPoints(String title, List<dynamic> bulletPoints) {
     String output = "$title:\n";
 
     for (int i = 0; i < bulletPoints.length; i++) {
       String currBP = bulletPoints[i];
       output += "- $currBP\n";
     }
-    return output;
+    return Card(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Text(output, style: TextTheme.of(context).bodyLarge),
+      ),
+    );
   }
 
   int _calcXP(int score) {
@@ -122,24 +124,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         _buildScoreMessage(feedback["score"]),
                         style: TextTheme.of(context).headlineMedium,
                       ),
-                      Card(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            _buildBulletPoints("Pros", feedback["pros"]),
-                            style: TextTheme.of(context).bodyLarge,
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            _buildBulletPoints("Cons", feedback["cons"]),
-                            style: TextTheme.of(context).bodyLarge,
-                          ),
-                        ),
-                      ),
+                      if (feedback["pros"].length > 0)
+                        _buildBulletPoints("Pros", feedback['pros']),
+                      if (feedback["cons"].length > 0)
+                        _buildBulletPoints("Cons", feedback["cons"]),
+
                       ElevatedButton.icon(
                         onPressed: () {
                           context.go("/unit/${widget.unitNumber}");

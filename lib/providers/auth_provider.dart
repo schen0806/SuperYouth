@@ -149,6 +149,7 @@ class AuthenticationProvider extends ChangeNotifier {
         level++;
         currXP -= xpCost;
       }
+
       await _db.collection('users').doc(_user!.uid).update({
         'level': level,
         'xp': currXP,
@@ -160,8 +161,11 @@ class AuthenticationProvider extends ChangeNotifier {
         'feedback': feedback,
         'timestamp': FieldValue.serverTimestamp(),
       });
+      await loadUserData();
     } on Exception catch (e) {
       print("Error updating the user progress");
+    } finally {
+      notifyListeners();
     }
   }
 
