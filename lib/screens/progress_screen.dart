@@ -3,7 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:super_youth/providers/auth_provider.dart';
 import 'package:super_youth/widgets/nav_drawer.dart';
 
-class ProgressScreen extends StatelessWidget {
+class ProgressScreen extends StatefulWidget {
+  @override
+  @override
+  State<StatefulWidget> createState() {
+    return _ProgressScreenState();
+  }
+}
+
+class _ProgressScreenState extends State<ProgressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
