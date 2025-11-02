@@ -19,29 +19,69 @@ class _ProgressScreenState extends State<ProgressScreen> {
       drawer: NavDrawer(),
       body: SafeArea(
         child: Center(
-          child: Consumer<AuthenticationProvider>(
+          child: FutureBuilder(
+            future:
+            Provider.of<AuthenticationProvider>(
+              context,
+              listen: false,
+            ).getAvgScore(),
             builder: (
-              BuildContext context,
-              AuthenticationProvider auth,
-              Widget? child,
-            ) {
-              return Container(
-                padding: EdgeInsets.all(15),
-                child: Column(
+                BuildContext context,
+                AsyncSnapshot<List<double>> snapshot,
+                ) {
+              if (snapshot.hasData) {
+                return Column(
                   spacing: 20,
                   children: [
-                    Text(
-                      "Progress",
-                      style: TextTheme.of(context).displayMedium,
-                    ),
-                    Text(
-                      "Level: ${auth.userData?['level']}",
-                      style: TextTheme.of(context).displayMedium,
-                    ),
-                    _buildXPBar(auth.userData?['level'], auth.userData?['xp']),
+                    Text("Progress", style: TextTheme.of(context).displayMedium),
+                    //loop through each avg score in the snapshot data
+                    for (int i = 0; i < snapshot.data!.length; i++)
+                      if (snapshot.data![i] != 0)
+                        Card(
+                          child: SizedBox(
+                            height: 80,
+                            width: 230,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Average Score for Unit ${i + 1}: ",
+                                  style: TextTheme.of(context).bodyLarge,
+                                ),
+                                Text(
+                                  "${snapshot.data![i].toStringAsFixed(2)}",
+                                  style: TextTheme.of(context).displaySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    Consumer<AuthenticationProvider>(
+                      builder: (
+                          BuildContext context,
+                          AuthenticationProvider auth,
+                          Widget? child,
+                          ) {
+                        return Container(
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                            spacing: 20,
+                            children: [
+                              Text(
+                                "Level: ${auth.userData?['level']}",
+                                style: TextTheme.of(context).displayMedium,
+                              ),
+                              _buildXPBar(auth.userData?['level'], auth.userData?['xp']),
+                            ],
+                          ),
+                        );
+                      },
+                    )
                   ],
-                ),
-              );
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
             },
           ),
         ),
@@ -57,3 +97,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return LinearProgressIndicator.new(value: percentXP, color: Colors.cyan);
   }
 }
+
+/*
+
+ */

@@ -24,19 +24,19 @@ final List<Unit> units = [
     "Helping teens improve their communication skills through active listening",
     5,
   ),
-  Unit("Assertiveness", "state-needs-clearly", "Clear and to the point", 5),
-  Unit(
-    "Making a Good First Impression",
-    "make-good-first-impression",
-    "Showing Your Best Self",
-    5,
-  ),
-  Unit(
-    "Maintaining conversations",
-    "maintain-conversation-flow",
-    "Never stop running out of things to say",
-    6,
-  ),
+  // Unit("Assertiveness", "state-needs-clearly", "Clear and to the point", 5),
+  // Unit(
+  //   "Making a Good First Impression",
+  //   "make-good-first-impression",
+  //   "Showing Your Best Self",
+  //   5,
+  // ),
+  // Unit(
+  //   "Maintaining conversations",
+  //   "maintain-conversation-flow",
+  //   "Never stop running out of things to say",
+  //   6,
+  // ),
   Unit(
     "Conflict Resolution",
     "conflict-resolution",

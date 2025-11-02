@@ -197,7 +197,11 @@ class AuthenticationProvider extends ChangeNotifier {
       }
 
       for (int i = 0; i < getAvgScorePerUnit.length; i++) {
-        getAvgScorePerUnit[i] /= completedScenariosPerUnit[i];
+        if (completedScenariosPerUnit[i] != 0) {
+          getAvgScorePerUnit[i] /= completedScenariosPerUnit[i];
+        } else {
+          getAvgScorePerUnit[i] = 0;
+        }
       }
       return getAvgScorePerUnit;
     } on Exception catch (e) {
